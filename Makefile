@@ -3,6 +3,9 @@
 test:
 	python manage.py test
 
+chaos_test:
+	python scripts/chaos_test.py
+
 migrate:
 	python manage.py makemigrations
 	python manage.py migrate
