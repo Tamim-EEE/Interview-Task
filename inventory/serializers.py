@@ -1,11 +1,13 @@
 from rest_framework import serializers
 from .models import Product, Reservation, Order, AuditLog
 
+
 # Simple serializer for nested representation
 class SimpleProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ("id", "name")
+
 
 # Serializer for Product model with invariant validation
 class ProductSerializer(serializers.ModelSerializer):
@@ -37,6 +39,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
         return attrs
 
+
 # Serializer for Reservation model(read operations)
 class ReservationReadSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField()
@@ -46,12 +49,14 @@ class ReservationReadSerializer(serializers.ModelSerializer):
         model = Reservation
         fields = "__all__"
 
+
 # Serializer for Reservation model (write operations)
 class ReservationWriteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reservation
         fields = "__all__"
         read_only_fields = ("id", "user", "expires_at", "created_at")
+
 
 # Serializers for Order model(read operations)
 class OrderReadSerializer(serializers.ModelSerializer):
@@ -62,12 +67,14 @@ class OrderReadSerializer(serializers.ModelSerializer):
         model = Order
         fields = "__all__"
 
+
 # Serializers for Order model(write operations)
 class OrderWriteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = "__all__"
         read_only_fields = ("id", "user", "created_at", "updated_at", "total")
+
 
 # Serializer for AuditLog model
 class AuditLogSerializer(serializers.ModelSerializer):
