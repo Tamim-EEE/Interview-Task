@@ -140,9 +140,10 @@ celery -A core beat -l info --scheduler django_celery_beat.schedulers:DatabaseSc
 
 ### Alternative: Use the Makefile
 ```bash
-make migrate  # Run migrations
-make test     # Run all tests
-make clean    # Clean up Python cache files
+make migrate    # Run migrations
+make test       # Run all tests cases
+make chaos_test # Run chaos test
+make clean      # Clean up Python cache files
 ```
 
 ---
