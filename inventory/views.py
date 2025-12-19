@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets, serializers
 from rest_framework.authentication import SessionAuthentication
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.db import transaction
 from django.utils import timezone
@@ -22,7 +22,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 # ViewSets for Product
 class ProductViewSet(viewsets.ModelViewSet):
-    queryset = Product.objects.all()
+    queryset = Product.objects.all().order_by("-created_at")
     serializer_class = ProductSerializer
     authentication_classes = [JWTAuthentication, SessionAuthentication]
     permission_classes = [IsAuthenticatedOrReadOnly]
@@ -30,7 +30,7 @@ class ProductViewSet(viewsets.ModelViewSet):
 
 # ViewSets for Reservation
 class ReservationViewSet(viewsets.ModelViewSet):
-    queryset = Reservation.objects.select_related("user", "product")
+    queryset = Reservation.objects.select_related("user", "product").order_by("-created_at")
     authentication_classes = [JWTAuthentication, SessionAuthentication]
     permission_classes = [IsAuthenticatedOrReadOnly]
 
@@ -166,8 +166,8 @@ class OrderViewSet(viewsets.ModelViewSet):
 
 
 # ViewSets for AuditLog
-class AuditLogViewSet(viewsets.ModelViewSet):
-    queryset = AuditLog.objects.all()
+class AuditLogViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = AuditLog.objects.all().order_by("-timestamp")
     serializer_class = AuditLogSerializer
     authentication_classes = [JWTAuthentication, SessionAuthentication]
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticated]
