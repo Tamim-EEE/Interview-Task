@@ -20,17 +20,19 @@ class OrderAdminForm(forms.ModelForm):
         return cleaned_data
 
 # Admin registrations
+
+# Admin for Product model
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = ("name", "price", "total_stock", "available_stock", "reserved_stock")
 
-
+# Admin for Reservation model
 @admin.register(Reservation)
 class ReservationAdmin(admin.ModelAdmin):
     list_display = ("id", "product", "user", "quantity", "expires_at", "created_at")
     readonly_fields = ("id", "created_at")
 
-
+# Admin for Order model
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     form = OrderAdminForm
@@ -46,7 +48,7 @@ class OrderAdmin(admin.ModelAdmin):
     list_filter = ("status", "created_at")
     readonly_fields = ("id", "created_at", "updated_at", "total")
 
-
+# Admin for AuditLog model
 @admin.register(AuditLog)
 class AuditLogAdmin(admin.ModelAdmin):
     list_display = ("id", "actor", "action", "object_type", "object_id", "timestamp")

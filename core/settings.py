@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework_simplejwt",
     "django_celery_beat",
+    "django_filters",
     # Local apps
     "inventory",
 ]
@@ -140,7 +141,7 @@ CELERY_TIMEZONE = TIME_ZONE
 CELERY_BEAT_SCHEDULE = {
     "cleanup-expired-reservations": {
         "task": "inventory.tasks.cleanup_expired_reservations",
-        "schedule": 300.0,  # Every 5 minutes
+        "schedule": 60.0,  # Every 1 minute
     },
 }
 

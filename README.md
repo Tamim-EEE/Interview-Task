@@ -39,7 +39,7 @@ All responses include a `request_id` UUID for tracing.
 
 ## Cleanup Strategy
 
-Expired reservations are cleaned up using Celery Beat every 5 minutes.
+Expired reservations are cleaned up using Celery Beat every 1 minutes.
 
 To run the Celery worker:
 ```bash
@@ -87,7 +87,7 @@ The composite index on `(created_at, status)` optimizes queries filtering by bot
 
 1. **Crash recovery after reservation**: Use database transactions with rollback on failure. For partial failures, implement compensation logic to release reserved stock.
 
-2. **Cleanup strategy + frequency**: Celery beat every 5 minutes for cleanup. Frequency based on reservation duration (10 minutes) - clean more often than expiration time.
+2. **Cleanup strategy + frequency**: Celery beat every 1 minutes for cleanup. Frequency based on reservation duration (10 minutes) - clean more often than expiration time.
 
 3. **Multi-warehouse design**: Use a Warehouse model with many-to-many relationship to products. Stock levels per warehouse, reservation locks per warehouse.
 

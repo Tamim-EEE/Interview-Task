@@ -3,7 +3,7 @@ from django.utils import timezone
 from django.db import transaction
 from .models import Reservation, Product, AuditLog
 
-
+# Task to clean up expired reservations
 @shared_task
 def cleanup_expired_reservations():
     expired_reservations = Reservation.objects.filter(expires_at__lt=timezone.now())

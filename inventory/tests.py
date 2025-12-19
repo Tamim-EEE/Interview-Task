@@ -2,27 +2,24 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 from django.utils import timezone
 from datetime import timedelta
-from django.db import transaction
 from .models import Product, Reservation, Order, AuditLog
 from rest_framework.test import APITestCase
 from rest_framework import status
 from django.urls import reverse
-import threading
-import time
 
-
+# Tests for Product Model
 class ProductModelTest(TestCase):
     def test_invariant(self):
         product = Product(
             name="Test", total_stock=10, available_stock=5, reserved_stock=5
         )
-        product.save()  # Should not raise
+        product.save()
 
         product.available_stock = 6
         with self.assertRaises(ValueError):
             product.save()
 
-
+# Tests for Product Serializer
 class ProductSerializerTest(TestCase):
     def test_valid_data(self):
         from .serializers import ProductSerializer
@@ -63,7 +60,7 @@ class ProductSerializerTest(TestCase):
         self.assertIn("non_field_errors", serializer.errors)
         self.assertIn("Invariant violated", str(serializer.errors))
 
-
+# Tests for Reservation Model
 class ReservationModelTest(TestCase):
     def setUp(self):
         self.user = User.objects.create_user("testuser", "test@example.com", "password")
@@ -80,7 +77,7 @@ class ReservationModelTest(TestCase):
         )
         self.assertTrue(reservation.is_expired())
 
-
+# Tests for Order Model
 class OrderModelTest(TestCase):
     def setUp(self):
         self.user = User.objects.create_user("testuser", "test@example.com", "password")
@@ -105,7 +102,7 @@ class OrderModelTest(TestCase):
         )
         self.assertFalse(order.can_transition_to("cancelled"))
 
-
+# Tests for Reservation API
 class ReservationAPITest(APITestCase):
     def setUp(self):
         self.user = User.objects.create_user("testuser", "test@example.com", "password")
@@ -128,7 +125,7 @@ class ReservationAPITest(APITestCase):
         response = self.client.post(reverse("reservation-list"), data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-
+# Tests for Order API
 class OrderAPITest(APITestCase):
     def setUp(self):
         self.user = User.objects.create_user("testuser", "test@example.com", "password")
@@ -156,7 +153,7 @@ class OrderAPITest(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-
+# Tests for AuditLog Model
 class AuditLogTest(TestCase):
     def setUp(self):
         self.user = User.objects.create_user("testuser", "test@example.com", "password")

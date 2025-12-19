@@ -3,7 +3,7 @@ from django.utils import timezone
 from django.db import transaction
 from inventory.models import Reservation, Product, AuditLog
 
-
+# Management command to clean up expired reservations
 class Command(BaseCommand):
     help = "Cleanup expired reservations"
 

@@ -4,6 +4,7 @@ import django
 import multiprocessing
 
 
+# Chaos test script to simulate concurrent purchase attempts
 def setup_django():
     sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
     os.chdir(os.path.dirname(os.path.dirname(__file__)))
@@ -11,6 +12,7 @@ def setup_django():
     django.setup()
 
 
+# Function to attempt a purchase
 def attempt_purchase(product_id, user_id):
     setup_django()
     from django.contrib.auth.models import User
@@ -44,7 +46,7 @@ if __name__ == "__main__":
     setup_django()
 
     from django.contrib.auth.models import User
-    from inventory.models import Product, Reservation
+    from inventory.models import Product
 
     # Seed DB
     user, created = User.objects.get_or_create(
@@ -64,9 +66,7 @@ if __name__ == "__main__":
     product.reserved_stock = 0
     product.save()
 
-    with multiprocessing.Pool(
-        processes=50
-    ) as pool:  # 50 parallel processes
+    with multiprocessing.Pool(processes=50) as pool:  # 50 parallel processes
         results = pool.starmap(
             attempt_purchase, [(product.id, user.id) for _ in range(50)]
         )
