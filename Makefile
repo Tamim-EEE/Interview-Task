@@ -1,4 +1,4 @@
-.PHONY: test clean migrate
+.PHONY: test clean migrate chaos_test
 
 test:
 	python manage.py test
